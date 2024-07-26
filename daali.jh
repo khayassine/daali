@@ -1,0 +1,46 @@
+entity User {
+}
+
+entity ObjetPerdu {
+  description String required,
+  datePerte Instant required,
+  lieuPerte String,
+  photo ImageBlob
+}
+
+entity ObjetTrouve {
+  description String required,
+  dateTrouve Instant required,
+  lieuTrouve String,
+  photo ImageBlob
+}
+
+entity Match {
+  objetPerdu ObjetPerdu required,
+  objetTrouve ObjetTrouve required,
+  status MatchStatus
+}
+
+entity TypeObjet {
+  code String required,
+  description String required,
+}
+
+enum MatchStatus {
+  PENDING,
+  APPROVED,
+  REJECTED
+}
+
+relationship ManyToOne {
+  ObjetPerdu{utilisateur(login)} to Utilisateur
+  ObjetTrouve{utilisateur(login)} to Utilisateur
+}
+
+relationship ManyToOne {
+  Match{objetPerdu(description)} to ObjetPerdu
+  Match{objetTrouve(description)} to ObjetTrouve
+}
+
+service Utilisateur, ObjetPerdu, ObjetTrouve, Match with serviceClass
+paginate ObjetPerdu, ObjetTrouve, Match with pagination
